@@ -9,7 +9,7 @@ using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-
+// test
 int main() {
 
 	if (glfwInit() == false)
