@@ -98,6 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)bootstrap/dependencies/glfw/include;$(SolutionDir)bootstrap/dependencies/glm;$(SolutionDir)bootstrap/dependencies/stb;$(SolutionDir)bootstrap/dependencies/imgui;$(SolutionDir)bootstrap\bootstrap</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)bootstrap/dependencies/glfw/lib-vc2015/x64;$(SolutionDir)bootstrap/dependencies/glm;$(SolutionDir)bootstrap/dependencies/stb;$(SolutionDir)bootstrap/dependencies/imgui;</AdditionalLibraryDirectories>
@@ -136,11 +137,15 @@
   <ItemGroup>
     <ClCompile Include="..\bootstrap\bootstrap\Gizmos.cpp" />
     <ClCompile Include="..\bootstrap\bootstrap\gl_core_4_4.c" />
+    <ClCompile Include="ComputerGraphicsApp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Application.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\bootstrap\bootstrap\Gizmos.h" />
     <ClInclude Include="..\bootstrap\bootstrap\gl_core_4_4.h" />
+    <ClInclude Include="ComputerGraphicsApp.h" />
+    <ClInclude Include="Application.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
