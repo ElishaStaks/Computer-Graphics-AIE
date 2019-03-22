@@ -18,8 +18,6 @@ namespace eli {
 		virtual bool update(float deltaTime) = 0;
 		virtual void draw() = 0;
 
-		void quit() { m_gameOver = true; }
-
 	protected:
 
 		GLFWwindow* m_window;

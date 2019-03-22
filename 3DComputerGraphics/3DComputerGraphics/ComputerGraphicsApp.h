@@ -1,5 +1,6 @@
 #pragma once
 #include "Application.h"
+#include "FlyCamera.h"
 #include <glm/ext.hpp>
 
 class ComputerGraphicsApp : public eli::Application {
@@ -15,7 +16,8 @@ public:
 
 protected:
 
-	GLFWwindow*      window;
+	GLFWwindow*     window;
 	glm::mat4		view;
 	glm::mat4		projection;
+	FlyCamera*      m_Camera;
 };

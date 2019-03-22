@@ -44,10 +44,15 @@ bool ComputerGraphicsApp::startUp()
 
 	// Initialises all our gizmos for 3d grid
 	aie::Gizmos::create(65536, 65536, 1000, 1000);
+	m_Camera = new FlyCamera();
+
+	m_Camera->setLookAt(glm::vec3(10), glm::vec3(0), { 0, 1, 0 });
+	m_Camera->setPerspective(glm::pi<float>() * .25f, 16.f / 9.f, .1f, 1000.f);
 
 	// set up virtual camera
-	view = glm::lookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
-	projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.f);
+	//view = glm::lookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
+	//projection = glm::perspective(glm::pi<float>() * 0.30f, 16 / 9.f, 0.1f, 1000.f);
+
 
 	return true;
 }
@@ -65,7 +70,8 @@ bool ComputerGraphicsApp::update(float deltaTime)
 
 	// updates monitor display		
 	glfwSwapBuffers(window);		
-	glfwPollEvents();			
+	glfwPollEvents();
+	m_Camera->update(deltaTime, window);
 
 	if (glfwWindowShouldClose(window) || glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_TRUE) {
 		return false;
@@ -100,5 +106,5 @@ void ComputerGraphicsApp::draw()
 			i == 10 ? white : black);
 	}
 	// Draws the view of the grid
-	aie::Gizmos::draw(projection * view);	
+	aie::Gizmos::draw(m_Camera->getProjectionView());
 }
