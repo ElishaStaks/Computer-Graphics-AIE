@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A8DA2BED-9C26-4F89-AA56-DBD93B35327F}</ProjectGuid>
     <RootNamespace>My3DComputerGraphics</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -142,6 +142,8 @@
     <ClCompile Include="FlyCamera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\bootstrap\bootstrap\Gizmos.h" />
@@ -150,6 +152,8 @@
     <ClInclude Include="ComputerGraphicsApp.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="FlyCamera.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

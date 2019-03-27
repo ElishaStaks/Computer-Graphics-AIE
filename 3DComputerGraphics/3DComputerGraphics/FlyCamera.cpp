@@ -3,7 +3,7 @@
 
 FlyCamera::FlyCamera()
 {
-	setSpeed(3);
+	setSpeed(10);
 	mouseSpeed = .1f;
 }
 
@@ -19,8 +19,6 @@ void FlyCamera::update(float deltaTime, GLFWwindow* window)
 	glm::vec3 up = { this->getView()[0][1], this->getView()[1][1], this->getView()[2][1] };
 	glm::vec3 right = { this->getView()[0][0], this->getView()[1][0], this->getView()[2][0] };
 
-	// float speed = 3.0f;
-
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		position += forward * speed * deltaTime;
 	}
@@ -33,8 +31,26 @@ void FlyCamera::update(float deltaTime, GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 		position -= right * speed * deltaTime;
 	}
+
+	// Speeds up movement forward
+	if (glfwGetKey(window, GLFW_KEY_W) && (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS)) {
+		position += forward + 0.01f * deltaTime;
+	}
+	// Speeds up movement backwards
+	if (glfwGetKey(window, GLFW_KEY_S) && (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS)) {
+		position -= forward + 0.01f * deltaTime;
+	}
+	// Speeds up movement right
+	if (glfwGetKey(window, GLFW_KEY_D) && (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS)) {
+		position += right + 0.01f * deltaTime;
+	}
+	// Speeds up movement left
+	if (glfwGetKey(window, GLFW_KEY_A) && (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS)) {
+		position -= right + 0.01f * deltaTime;
+	}
+
 	this->translate(position);
-	//float mouseSpeed = 0.01f;
+
 	double xPos = 0.0;
 	double yPos = 0.0;
 

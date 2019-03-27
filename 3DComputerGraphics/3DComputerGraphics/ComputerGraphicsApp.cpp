@@ -23,7 +23,7 @@ ComputerGraphicsApp::~ComputerGraphicsApp()
 bool ComputerGraphicsApp::startUp()
 {
 	// creates openGL window
-	if (glfwInit() == false) 
+	if (glfwInit() == false)
 		return false;
 
 	window = glfwCreateWindow(1280, 720, "Computer Graphics", nullptr, nullptr);
@@ -46,12 +46,29 @@ bool ComputerGraphicsApp::startUp()
 	aie::Gizmos::create(65536, 65536, 1000, 1000);
 	m_Camera = new FlyCamera();
 
+	// Sets up virtual camera
 	m_Camera->setLookAt(glm::vec3(10), glm::vec3(0), { 0, 1, 0 });
 	m_Camera->setPerspective(glm::pi<float>() * .25f, 16.f / 9.f, .1f, 1000.f);
 
-	// set up virtual camera
-	//view = glm::lookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
-	//projection = glm::perspective(glm::pi<float>() * 0.30f, 16 / 9.f, 0.1f, 1000.f);
+
+	// Load vertex shader from file
+	shader.loadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
+
+	// Load fragment shader from file
+	shader.loadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.vert");
+	if (shader.link() == false) {
+		printf("Shader Error: %s \n", shader.getLastError());
+	}
+
+	m_quadMesh.initialiseQuad();
+
+	m_quadTransform = {
+		10, 0, 0, 0,
+		0, 10, 0, 0,
+		0, 0, 10, 0,
+		0, 0, 0, 1 };
+
+
 
 
 	return true;
@@ -105,6 +122,13 @@ void ComputerGraphicsApp::draw()
 			vec3(-10, 0, -10 + i),
 			i == 10 ? white : black);
 	}
+
+	shader.bind();
+	auto pvm = m_Camera->getProjection() * m_Camera->getView() * m_quadTransform;
+	shader.bindUniform("ProjectionViewModel", pvm);
+
+	
+	m_quadMesh.draw();
 	// Draws the view of the grid
 	aie::Gizmos::draw(m_Camera->getProjectionView());
 }
