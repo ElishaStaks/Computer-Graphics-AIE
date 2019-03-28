@@ -4,6 +4,8 @@
 #include <glm/ext.hpp>
 #include "Shader.h"
 #include "Mesh.h"
+#include "OBJMesh.h"
+#include "Texture.h"
 
 class ComputerGraphicsApp : public eli::Application {
 
@@ -18,15 +20,15 @@ public:
 
 protected:
 
-	glm::mat4 m_viewMatrix;
-	glm::mat4 m_projectionMatrix;
-
-	aie::ShaderProgram       shader;
-	Mesh                     m_quadMesh;
 	glm::mat4                m_quadTransform;
-
-	GLFWwindow*              window;
 	glm::mat4		         view;
 	glm::mat4		         projection;
+	GLFWwindow*              window;
 	FlyCamera*               m_Camera;
+	Mesh                     m_quadMesh;
+	aie::ShaderProgram       m_shaders;
+	glm::mat4                m_dragonTransform;
+	aie::OBJMesh             m_dragonMesh;
+	aie::Texture             texture1;
+	aie::Texture             texture2;
 };

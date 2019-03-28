@@ -43,7 +43,7 @@ bool ComputerGraphicsApp::startUp()
 	} // creates openGL window
 
 	// Initialises all our gizmos for 3d grid
-	aie::Gizmos::create(65536, 65536, 1000, 1000);
+	aie::Gizmos::create(10000, 10000, 10000, 10000);
 	m_Camera = new FlyCamera();
 
 	// Sets up virtual camera
@@ -52,27 +52,53 @@ bool ComputerGraphicsApp::startUp()
 
 
 	// Load vertex shader from file
-	shader.loadShader(aie::eShaderStage::VERTEX, "./shaders/simple.vert");
+	m_shaders.loadShader(aie::eShaderStage::VERTEX, "../bootstrap/Shaders/simple.vert");
 
 	// Load fragment shader from file
-	shader.loadShader(aie::eShaderStage::FRAGMENT, "./shaders/simple.vert");
-	if (shader.link() == false) {
-		printf("Shader Error: %s \n", shader.getLastError());
+	m_shaders.loadShader(aie::eShaderStage::FRAGMENT, "../bootstrap/Shaders/simple.frag");
+	if (m_shaders.link() == false) {
+		printf("Shader Error: %s \n", m_shaders.getLastError());
 	}
 
-	m_quadMesh.initialiseQuad();
+	if (m_dragonMesh.load("../bootstrap/stanford/Dragon.obj") == false) {
+		printf("Dragon Mesh Error!\n");
+		return false;
+	}
 
-	m_quadTransform = {
-		10, 0, 0, 0,
-		0, 10, 0, 0,
-		0, 0, 10, 0,
-		0, 0, 0, 1 };
+	//// load texture
+	//texture1.load("myTexture.png");
+	//// create a 2x2 black-n-white checker texture
+	//// RED simply means one colour channel, i.e. grayscale
+	//unsigned char texelData[4] = { 0, 255, 255, 0 };
+	//texture2.create(2, 2, aie::Texture::RED, texelData);
 
 
+	//// Define 6 verticies for 2 triangles
+	//Mesh::Vertex vertices[4];
+	//vertices[0].position = { -0.5f, 0, 0.5f, 1 };
+	//vertices[1].position = { 0.5f, 0, 0.5f, 1 };
+	//vertices[2].position = { -0.5f, 0, -0.5f, 1 };
+	//vertices[3].position = { 0.5f, 0, -0.5f, 1 };
 
+	//unsigned int indices[6] = { 0, 1, 2, 2, 1, 3 };
+	//m_quadMesh.initialiseQuad(6, vertices, 6, indices);
+
+	//m_quadTransform = {
+	//	10, 0, 0, 0,
+	//	0, 10, 0, 0,
+	//	0, 0, 10, 0,
+	//	0, 0, 0, 1 
+	//};
+
+	m_dragonTransform = {
+		0.5f, 0, 0, 0,
+		0, 0.5f, 0, 0,
+		0, 0, 0.5f, 0,
+		0, 0, 0, 1
+	};
 
 	return true;
-}
+ }
 
 void ComputerGraphicsApp::shutDown()
 {
@@ -106,6 +132,9 @@ void ComputerGraphicsApp::draw()
 	glClearColor(0.25f, 0.25f, 0.25f, 1);
 	glEnable(GL_DEPTH_TEST); // enables depth buffer
 
+	// Updates in case window resize
+	m_Camera->setPerspective(glm::pi<float>() * .25f, 16.f / 9.f, .1f, 1000.f);
+
 	aie::Gizmos::addTransform(glm::mat4(1));
 
 	vec4 white(1);
@@ -122,13 +151,15 @@ void ComputerGraphicsApp::draw()
 			vec3(-10, 0, -10 + i),
 			i == 10 ? white : black);
 	}
+	// Bind shader
+	m_shaders.bind();
+	// Bind transform
+	auto pvm = m_Camera->getProjection() * m_Camera->getView() * m_dragonTransform;
+	m_shaders.bindUniform("ProjectionViewModel", pvm);
 
-	shader.bind();
-	auto pvm = m_Camera->getProjection() * m_Camera->getView() * m_quadTransform;
-	shader.bindUniform("ProjectionViewModel", pvm);
-
-	
+	m_dragonMesh.draw();
 	m_quadMesh.draw();
+
 	// Draws the view of the grid
 	aie::Gizmos::draw(m_Camera->getProjectionView());
 }

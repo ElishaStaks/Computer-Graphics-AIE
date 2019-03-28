@@ -19,7 +19,7 @@ public:
 	};
 
 	// Mesh plane
-	void initialiseQuad();
+	void initialiseQuad(unsigned int vertexCount, const Vertex* verticies, unsigned int indexCount, unsigned int* indices);
 	virtual void draw();
 
 protected:

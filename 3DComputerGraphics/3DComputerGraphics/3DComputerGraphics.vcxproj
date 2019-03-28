@@ -137,23 +137,28 @@
   <ItemGroup>
     <ClCompile Include="..\bootstrap\bootstrap\Gizmos.cpp" />
     <ClCompile Include="..\bootstrap\bootstrap\gl_core_4_4.c" />
+    <ClCompile Include="..\bootstrap\bootstrap\Texture.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ComputerGraphicsApp.cpp" />
     <ClCompile Include="FlyCamera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="OBJMesh.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\bootstrap\bootstrap\Gizmos.h" />
     <ClInclude Include="..\bootstrap\bootstrap\gl_core_4_4.h" />
+    <ClInclude Include="..\bootstrap\bootstrap\Texture.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ComputerGraphicsApp.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="FlyCamera.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="OBJMesh.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
