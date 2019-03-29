@@ -52,50 +52,41 @@ bool ComputerGraphicsApp::startUp()
 
 
 	// Load vertex shader from file
-	m_shaders.loadShader(aie::eShaderStage::VERTEX, "../bootstrap/Shaders/simple.vert");
+	m_shaders.loadShader(aie::eShaderStage::VERTEX, "../bootstrap/shaders/phong.vert");
 
 	// Load fragment shader from file
-	m_shaders.loadShader(aie::eShaderStage::FRAGMENT, "../bootstrap/Shaders/simple.frag");
+	m_shaders.loadShader(aie::eShaderStage::FRAGMENT, "../bootstrap/shaders/phong.frag");
 	if (m_shaders.link() == false) {
 		printf("Shader Error: %s \n", m_shaders.getLastError());
 	}
 
-	if (m_dragonMesh.load("../bootstrap/stanford/Dragon.obj") == false) {
-		printf("Dragon Mesh Error!\n");
-		return false;
-	}
+	//if (m_gridTexture.load("../bootstrap/bin/textures/numbered_grid.tga") == false) {
+	//	printf("Failed to load texture!\n");
+	//	return false;
+	//}
 
-	//// load texture
-	//texture1.load("myTexture.png");
-	//// create a 2x2 black-n-white checker texture
-	//// RED simply means one colour channel, i.e. grayscale
-	//unsigned char texelData[4] = { 0, 255, 255, 0 };
-	//texture2.create(2, 2, aie::Texture::RED, texelData);
+	//if (m_spearMesh.load("../bootstrap/models/soulspear/soulspear.obj",true, true) == false) {
+	//	printf("Dragon Mesh Error!\n");
+	//	return false;
+	//}
 
-
-	//// Define 6 verticies for 2 triangles
-	//Mesh::Vertex vertices[4];
-	//vertices[0].position = { -0.5f, 0, 0.5f, 1 };
-	//vertices[1].position = { 0.5f, 0, 0.5f, 1 };
-	//vertices[2].position = { -0.5f, 0, -0.5f, 1 };
-	//vertices[3].position = { 0.5f, 0, -0.5f, 1 };
-
-	//unsigned int indices[6] = { 0, 1, 2, 2, 1, 3 };
-	//m_quadMesh.initialiseQuad(6, vertices, 6, indices);
-
-	//m_quadTransform = {
-	//	10, 0, 0, 0,
-	//	0, 10, 0, 0,
-	//	0, 0, 10, 0,
-	//	0, 0, 0, 1 
+	//m_spearTransform = {
+	//	1, 0, 0, 0,
+	//	0, 1, 0, 0,
+	//	0, 0, 1, 0,
+	//	0, 0, 0, 1
 	//};
 
-	m_dragonTransform = {
-		0.5f, 0, 0, 0,
-		0, 0.5f, 0, 0,
-		0, 0, 0.5f, 0,
-		0, 0, 0, 1
+	 //Create simple quad
+	m_quadMesh.initialiseQuad();
+
+	m_quadTransform = {
+		10, 0, 0, 0,
+		0, 10, 0, 0,
+		0, 0, 10, 0,
+		0, 0, 0, 1 
 	};
+
 
 	return true;
  }
@@ -109,12 +100,16 @@ void ComputerGraphicsApp::shutDown()
 
 bool ComputerGraphicsApp::update(float deltaTime)
 {
+	float time = getTime();
 	aie::Gizmos::clear();
 
 	// updates monitor display		
 	glfwSwapBuffers(window);		
 	glfwPollEvents();
 	m_Camera->update(deltaTime, window);
+
+	// rotates light around the scene
+	m_light.direction = glm::normalize(vec3(glm::cos(time * 2), glm::sin(time * 2), 0));
 
 	if (glfwWindowShouldClose(window) || glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_TRUE) {
 		return false;
@@ -134,6 +129,7 @@ void ComputerGraphicsApp::draw()
 
 	// Updates in case window resize
 	m_Camera->setPerspective(glm::pi<float>() * .25f, 16.f / 9.f, .1f, 1000.f);
+	m_shaders.bind();
 
 	aie::Gizmos::addTransform(glm::mat4(1));
 
@@ -154,11 +150,20 @@ void ComputerGraphicsApp::draw()
 	// Bind shader
 	m_shaders.bind();
 	// Bind transform
-	auto pvm = m_Camera->getProjection() * m_Camera->getView() * m_dragonTransform;
+	auto pvm = m_Camera->getProjection() * m_Camera->getView() * m_spearTransform;
 	m_shaders.bindUniform("ProjectionViewModel", pvm);
 
-	m_dragonMesh.draw();
-	m_quadMesh.draw();
+	// Bind transforms for lighting
+	m_shaders.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_spearTransform)));
+
+	// Bind texture location
+	m_shaders.bindUniform("diffuseTexture", 0);
+
+	// Bind texture to specified location
+	m_gridTexture.bind(0);
+
+	m_spearMesh.draw();
+	//m_quadMesh.draw();
 
 	// Draws the view of the grid
 	aie::Gizmos::draw(m_Camera->getProjectionView());

@@ -18,6 +18,8 @@ namespace eli {
 		virtual bool update(float deltaTime) = 0;
 		virtual void draw() = 0;
 
+		float getTime() const;
+
 	protected:
 
 		GLFWwindow* m_window;

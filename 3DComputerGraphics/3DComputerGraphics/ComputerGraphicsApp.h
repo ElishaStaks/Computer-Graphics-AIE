@@ -20,15 +20,24 @@ public:
 
 protected:
 
-	glm::mat4                m_quadTransform;
 	glm::mat4		         view;
 	glm::mat4		         projection;
 	GLFWwindow*              window;
 	FlyCamera*               m_Camera;
+
+	glm::mat4                m_spearTransform;
+	aie::OBJMesh             m_spearMesh;
 	Mesh                     m_quadMesh;
-	aie::ShaderProgram       m_shaders;
-	glm::mat4                m_dragonTransform;
-	aie::OBJMesh             m_dragonMesh;
+	glm::mat4                m_quadTransform;
+
+	aie::Texture             m_gridTexture;
 	aie::Texture             texture1;
 	aie::Texture             texture2;
+	aie::ShaderProgram       m_shaders;
+
+
+	struct Light {
+		glm::vec3 direction;
+	};
+	Light                    m_light;
 };
