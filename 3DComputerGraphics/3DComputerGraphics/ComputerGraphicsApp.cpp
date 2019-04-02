@@ -60,32 +60,36 @@ bool ComputerGraphicsApp::startUp()
 		printf("Shader Error: %s \n", m_shaders.getLastError());
 	}
 
+	m_light.diffuse = { 1, 1, 0 };
+	m_light.specular = { 1, 1, 0 };
+	m_ambientLight = { 0.25f, 0.25f, 0.25f };
+
 	//if (m_gridTexture.load("../bootstrap/bin/textures/numbered_grid.tga") == false) {
 	//	printf("Failed to load texture!\n");
 	//	return false;
 	//}
 
-	//if (m_spearMesh.load("../bootstrap/models/soulspear/soulspear.obj",true, true) == false) {
-	//	printf("Dragon Mesh Error!\n");
-	//	return false;
-	//}
+	if (m_spearMesh.load("../bootstrap/models/soulspear/soulspear.obj", true, true) == false) {
+		printf("Dragon Mesh Error!\n");
+		return false;
+	}
 
-	//m_spearTransform = {
-	//	1, 0, 0, 0,
-	//	0, 1, 0, 0,
-	//	0, 0, 1, 0,
-	//	0, 0, 0, 1
-	//};
+	m_spearTransform = {
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	};
 
 	 //Create simple quad
-	m_quadMesh.initialiseQuad();
+	//m_quadMesh.initialiseQuad();
 
-	m_quadTransform = {
-		10, 0, 0, 0,
-		0, 10, 0, 0,
-		0, 0, 10, 0,
-		0, 0, 0, 1 
-	};
+	//m_quadTransform = {
+	//	10, 0, 0, 0,
+	//	0, 10, 0, 0,
+	//	0, 0, 10, 0,
+	//	0, 0, 0, 1 
+	//};
 
 
 	return true;
@@ -149,18 +153,27 @@ void ComputerGraphicsApp::draw()
 	}
 	// Bind shader
 	m_shaders.bind();
-	// Bind transform
+
+	// Bind light from notepad++
+	m_shaders.bindUniform("Ia", m_ambientLight);
+	m_shaders.bindUniform("Id", m_light.diffuse);
+	m_shaders.bindUniform("Is", m_light.specular);
+	m_shaders.bindUniform("LightDirection", m_light.direction);
+	// Position of the camera
+	m_shaders.bindUniform("cameraPosition", vec3(glm::inverse(m_Camera->getView())[3]));
+
+	// Bind transform from notepad++
 	auto pvm = m_Camera->getProjection() * m_Camera->getView() * m_spearTransform;
 	m_shaders.bindUniform("ProjectionViewModel", pvm);
 
-	// Bind transforms for lighting
+	// Bind transforms for lighting from notepad++
 	m_shaders.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_spearTransform)));
 
 	// Bind texture location
-	m_shaders.bindUniform("diffuseTexture", 0);
+	//m_shaders.bindUniform("diffuseTexture", 0);
 
 	// Bind texture to specified location
-	m_gridTexture.bind(0);
+	//m_gridTexture.bind(0);
 
 	m_spearMesh.draw();
 	//m_quadMesh.draw();
