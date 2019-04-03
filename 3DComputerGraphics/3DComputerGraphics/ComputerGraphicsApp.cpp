@@ -52,22 +52,23 @@ bool ComputerGraphicsApp::startUp()
 
 
 	// Load vertex shader from file
-	m_shaders.loadShader(aie::eShaderStage::VERTEX, "../bootstrap/shaders/phong.vert");
+	m_shaders.loadShader(aie::eShaderStage::VERTEX, "../bootstrap/shaders/normalmap.vert");
 
 	// Load fragment shader from file
-	m_shaders.loadShader(aie::eShaderStage::FRAGMENT, "../bootstrap/shaders/phong.frag");
+	m_shaders.loadShader(aie::eShaderStage::FRAGMENT, "../bootstrap/shaders/normalmap.frag");
+
 	if (m_shaders.link() == false) {
 		printf("Shader Error: %s \n", m_shaders.getLastError());
 	}
 
 	m_light.diffuse = { 1, 1, 0 };
-	m_light.specular = { 1, 1, 0 };
-	m_ambientLight = { 0.25f, 0.25f, 0.25f };
+	m_light.specular = { 20, 20, 20 };
+	m_ambientLight = { 0.25f, .25f, 0.25f };
 
-	//if (m_gridTexture.load("../bootstrap/bin/textures/numbered_grid.tga") == false) {
-	//	printf("Failed to load texture!\n");
-	//	return false;
-	//}
+	/*if (m_gridTexture.load("../bootstrap/bin/textures/numbered_grid.tga") == false) {
+		printf("Failed to load texture!\n");
+		return false;
+	}*/
 
 	if (m_spearMesh.load("../bootstrap/models/soulspear/soulspear.obj", true, true) == false) {
 		printf("Dragon Mesh Error!\n");
@@ -158,7 +159,7 @@ void ComputerGraphicsApp::draw()
 	m_shaders.bindUniform("Ia", m_ambientLight);
 	m_shaders.bindUniform("Id", m_light.diffuse);
 	m_shaders.bindUniform("Is", m_light.specular);
-	m_shaders.bindUniform("LightDirection", m_light.direction);
+	m_shaders.bindUniform("lightDirection", m_light.direction);
 	// Position of the camera
 	m_shaders.bindUniform("cameraPosition", vec3(glm::inverse(m_Camera->getView())[3]));
 
@@ -170,7 +171,7 @@ void ComputerGraphicsApp::draw()
 	m_shaders.bindUniform("NormalMatrix", glm::inverseTranspose(glm::mat3(m_spearTransform)));
 
 	// Bind texture location
-	//m_shaders.bindUniform("diffuseTexture", 0);
+	//m_shaders2.bindUniform("diffuseTexture", 0);
 
 	// Bind texture to specified location
 	//m_gridTexture.bind(0);

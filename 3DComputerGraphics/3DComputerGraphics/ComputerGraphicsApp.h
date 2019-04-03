@@ -34,6 +34,7 @@ protected:
 	aie::Texture             texture1;
 	aie::Texture             texture2;
 	aie::ShaderProgram       m_shaders;
+	aie::ShaderProgram       m_shaders2;
 
 
 	struct Light {
