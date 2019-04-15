@@ -6,7 +6,6 @@ class FlyCamera : public Camera
 {
 public:
 	FlyCamera();
-	//FlyCamera(float Speed, float mouseSensitivity);
 	~FlyCamera();
 
 	void update(float deltaTime, GLFWwindow* window);

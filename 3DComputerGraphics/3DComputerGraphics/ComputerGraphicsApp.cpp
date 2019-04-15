@@ -50,31 +50,39 @@ bool ComputerGraphicsApp::startUp()
 	m_Camera->setLookAt(glm::vec3(10), glm::vec3(0), { 0, 1, 0 });
 	m_Camera->setPerspective(glm::pi<float>() * .25f, 16.f / 9.f, .1f, 1000.f);
 
-
 	// Load vertex shader from file
-	m_shaders.loadShader(aie::eShaderStage::VERTEX, "../bootstrap/shaders/normalmap.vert");
+	m_shaders.loadShader(aie::eShaderStage::VERTEX, "../bootstrap/shaders/phong.vert");
 
 	// Load fragment shader from file
-	m_shaders.loadShader(aie::eShaderStage::FRAGMENT, "../bootstrap/shaders/normalmap.frag");
+	m_shaders.loadShader(aie::eShaderStage::FRAGMENT, "../bootstrap/shaders/phong.frag");
 
 	if (m_shaders.link() == false) {
 		printf("Shader Error: %s \n", m_shaders.getLastError());
 	}
 
-	m_light.diffuse = { 1, 1, 0 };
-	m_light.specular = { 20, 20, 20 };
+	// Diffuse changes colour
+	m_light.diffuse = { 1, 0, 0 };
+	// Specular changes how shiny
+	m_light.specular = { 2, 2, 2 };
+	// Ambient light changes how dark or light
 	m_ambientLight = { 0.25f, .25f, 0.25f };
+
+	m_light2.diffuse = { 0, 1, 0 };
+	m_light2.specular = { 2, 2, 2 };
+	m_ambientLight2 = { 0.50f, .50f, 0.50f };
 
 	/*if (m_gridTexture.load("../bootstrap/bin/textures/numbered_grid.tga") == false) {
 		printf("Failed to load texture!\n");
 		return false;
 	}*/
 
-	if (m_spearMesh.load("../bootstrap/models/soulspear/soulspear.obj", true, true) == false) {
-		printf("Dragon Mesh Error!\n");
+	// Loads in the spear obj texture 
+	if (m_spearMesh.load("../bootstrap/models/soulspear/soulspear.obj") == false) {
+		printf("Dragon Mesh Erwror!\n");
 		return false;
 	}
 
+	// Spear transform size
 	m_spearTransform = {
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -91,7 +99,6 @@ bool ComputerGraphicsApp::startUp()
 	//	0, 0, 10, 0,
 	//	0, 0, 0, 1 
 	//};
-
 
 	return true;
  }
@@ -134,7 +141,6 @@ void ComputerGraphicsApp::draw()
 
 	// Updates in case window resize
 	m_Camera->setPerspective(glm::pi<float>() * .25f, 16.f / 9.f, .1f, 1000.f);
-	m_shaders.bind();
 
 	aie::Gizmos::addTransform(glm::mat4(1));
 
@@ -159,7 +165,13 @@ void ComputerGraphicsApp::draw()
 	m_shaders.bindUniform("Ia", m_ambientLight);
 	m_shaders.bindUniform("Id", m_light.diffuse);
 	m_shaders.bindUniform("Is", m_light.specular);
-	m_shaders.bindUniform("lightDirection", m_light.direction);
+	m_shaders.bindUniform("LightDirection", m_light.direction);
+
+	// Bind light from notepad++
+	m_shaders.bindUniform("iA", m_ambientLight2);
+	m_shaders.bindUniform("iD", m_light2.diffuse);
+	m_shaders.bindUniform("iS", m_light2.specular);
+
 	// Position of the camera
 	m_shaders.bindUniform("cameraPosition", vec3(glm::inverse(m_Camera->getView())[3]));
 

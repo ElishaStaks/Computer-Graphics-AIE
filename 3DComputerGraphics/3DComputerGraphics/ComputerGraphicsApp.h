@@ -12,7 +12,6 @@ class ComputerGraphicsApp : public eli::Application {
 public:
 	ComputerGraphicsApp();
 	virtual ~ComputerGraphicsApp();
-
 	virtual bool startUp();
 	virtual void shutDown();
 	virtual bool update(float deltaTime);
@@ -36,7 +35,7 @@ protected:
 	aie::ShaderProgram       m_shaders;
 	aie::ShaderProgram       m_shaders2;
 
-
+	// Light source 1
 	struct Light {
 		glm::vec3 direction;
 		glm::vec3 diffuse;
@@ -44,4 +43,13 @@ protected:
 	};
 	Light                    m_light;
 	glm::vec3                m_ambientLight;
+
+	// Light source 2
+	struct Light2 {
+		glm::vec3 direction;
+		glm::vec3 diffuse;
+		glm::vec3 specular;
+	};
+	Light                    m_light2;
+	glm::vec3                m_ambientLight2;
 };

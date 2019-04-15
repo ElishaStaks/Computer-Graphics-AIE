@@ -7,13 +7,13 @@
 class Camera
 {
 public:
+	// Camera base class
 	Camera();
 	~Camera();
-
+	
 	virtual void update(float deltaTime, GLFWwindow* window) = 0;
 	void setPerspective(const float fieldOfView, const float aspectRatio, const float near, const float far);
 	void setLookAt(glm::vec3 from, glm::vec3 to, glm::vec3 up);
-	void setPosition(glm::vec3 position);
 	void setView(const glm::mat4 &view) { viewTransform = view; }
 	void setProjection(const glm::mat4 & projection) { projectionTransform = projection; }
 	void rotate(const float angle, const glm::vec3 & axis);

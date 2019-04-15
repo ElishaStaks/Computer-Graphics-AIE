@@ -14,11 +14,13 @@ FlyCamera::~FlyCamera()
 
 void FlyCamera::update(float deltaTime, GLFWwindow* window)
 {
+	// Setting up cameras views
 	glm::vec3 position(0.0f, 0.0f, 0.0f);
 	glm::vec3 forward = { -this->getView()[0][2], -this->getView()[1][2], -this->getView()[2][2] };
 	glm::vec3 up = { this->getView()[0][1], this->getView()[1][1], this->getView()[2][1] };
 	glm::vec3 right = { this->getView()[0][0], this->getView()[1][0], this->getView()[2][0] };
 
+	// Camera control
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		position += forward * speed * deltaTime;
 	}
@@ -56,12 +58,14 @@ void FlyCamera::update(float deltaTime, GLFWwindow* window)
 
 	glfwGetCursorPos(window, &xPos, &yPos);
 
+	// Cursor always staying in the centre of the screen
 	int width = 0;
 	int height = 0;
 	glfwGetWindowSize(window, &width, &height);
 	glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 	glm::vec2 mouseDir = { ((double)width / 2.0) - xPos, ((double)height / 2.0) - yPos };
 
+	// Cursor speed
 	this->rotate(mouseDir.x * mouseSpeed * deltaTime, this->getView() * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
 	this->rotate(mouseDir.y * mouseSpeed * deltaTime, { 1.0f, 0.0f, 0.0f });
 

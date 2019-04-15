@@ -7,11 +7,11 @@ Camera::Camera()
 {
 }
 
-
 Camera::~Camera()
 {
 }
 
+// Sets cameras field of view
 void Camera::setPerspective(const float fieldOfView, const float aspectRatio, const float near, const float far)
 {
 	projectionTransform = glm::perspective(fieldOfView, aspectRatio, near, far);
@@ -21,11 +21,6 @@ void Camera::setLookAt(glm::vec3 from, glm::vec3 to, glm::vec3 up)
 {
 	viewTransform = glm::lookAt(from, to, up);
 	worldTransform = glm::inverse(viewTransform);
-
-}
-
-void Camera::setPosition(glm::vec3 position)
-{
 }
 
 void Camera::rotate(const float angle, const glm::vec3 & axis)
